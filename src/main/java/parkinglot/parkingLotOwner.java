@@ -7,6 +7,11 @@ public class parkingLotOwner implements Parkinglot_Observer {
         isFullCapacity = true;
     }
 
+    @Override
+    public boolean setSpaceAvaibility() {
+        return true;
+    }
+
     public boolean isFullCapacity() {
         return isFullCapacity;
     }

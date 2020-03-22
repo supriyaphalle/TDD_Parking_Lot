@@ -7,18 +7,18 @@ import org.junit.Test;
 public class parkingLotTest {
 
     ParkingLot parkingLot=null;
-    private Object vehicle=null;
-    private Object vehicle2= null;
-    AirportSecurity airportSecurity =null;
+    private Vehicle vehicle=null;
+    private Vehicle vehicle2= null;
+    AirportSecurity security =null;
     parkingLotOwner owner = null;
     @Before
     public void setUp(){
         parkingLot = new ParkingLot(1);
-        vehicle=new Object();
-        vehicle2=new Object();
+        vehicle=new Vehicle();
+        vehicle2=new Vehicle();
         owner = new parkingLotOwner();
-        airportSecurity = new AirportSecurity();
-        //parkingLot.setParkingcapacity(2);
+        security = new AirportSecurity();
+        parkingLot.setParkingcapacity(2);
     }
 
     @Test
@@ -72,7 +72,6 @@ public class parkingLotTest {
 
     @Test
     public void givenWhenParkingLotFull_ShouldInformAirportSecurity() {
-        AirportSecurity security = new AirportSecurity();
         parkingLot.register(security);
         try {
             boolean park1=parkingLot.park(vehicle);
@@ -83,8 +82,16 @@ public class parkingLotTest {
         }
     }
 
-
-
-
-
+    @Test
+    public void givenAVehicle_WhenUnpark_ShouldInformToObserver(){
+    parkingLot.register(owner);
+    try{
+        boolean park = parkingLot.park(vehicle);
+        boolean park1 = parkingLot.park(vehicle2);
+        boolean b = parkingLot.unPark(vehicle);
+    }catch(ParkinglotException e) {
+        boolean spaceAvability = owner.setSpaceAvaibility();
+        Assert.assertTrue(spaceAvability);
+    }
+    }
 }
