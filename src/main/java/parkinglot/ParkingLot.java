@@ -6,7 +6,7 @@ public class ParkingLot {
     private final int actualCapacity;
     private int currentCapacity;
     private Object vehicle=null;
-    private parkingLotOwner owner=null;
+    private Parkinglot_Observer observer;
 
     public ParkingLot(int capacity) {
         this.actualCapacity=capacity;
@@ -15,25 +15,27 @@ public class ParkingLot {
 
     public boolean park(Object vehicle) throws ParkinglotException {
         if(this.currentCapacity==this.actualCapacity) {
-            owner.fullCapacity();
+            observer.setfullCapacity();
             throw new ParkinglotException("Parking_lot_IS_FULL",ParkinglotException.ExceptionType.Parking_lot_IS_FULL);
         }
-        currentCapacity++;
         this.vehicle=vehicle;
+        currentCapacity++;
         return true;
     }
 
 
     public boolean unPark(Object vehicleObject)  {
-        if(this.vehicle.equals(vehicleObject)) {
+        if(this.vehicle ==vehicleObject) {
             vehicle = null;
+            currentCapacity--;
             return true;
         }
-        return false;
+        throw new ParkinglotException("VEHICLE_IS_NOT_PRESENT",ParkinglotException.ExceptionType.VEHICLE_IS_NOT_PRESENT);
     }
 
-    public void register(parkingLotOwner owner) {
-        this.owner=owner;
+    public void register(Parkinglot_Observer observer) {
+        this.observer =observer;
+
     }
 
 

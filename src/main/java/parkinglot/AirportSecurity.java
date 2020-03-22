@@ -1,6 +1,6 @@
 package parkinglot;
 
-public class parkingLotOwner implements Parkinglot_Observer {
+public class AirportSecurity implements Parkinglot_Observer {
     private boolean isFullCapacity;
     @Override
     public void setfullCapacity() {
@@ -11,3 +11,4 @@ public class parkingLotOwner implements Parkinglot_Observer {
         return isFullCapacity;
     }
 }
+
