@@ -82,4 +82,26 @@ public class ParkingLot {
         }
         throw new ParkinglotException("Parking_lot_IS_FULL", ParkinglotException.ExceptionType.Parking_lot_IS_FULL);
     }
+
+    public int getParkingSlot(Vehicle vehicle) {
+        for(int slot =0; slot< vehicles.size();slot++){
+            if(vehicles.get(slot)==vehicle){
+                return slot;
+            }
+        }
+        throw new ParkinglotException("VEHICLE_IS_NOT_PRESENT", ParkinglotException.ExceptionType.VEHICLE_IS_NOT_PRESENT);
+    }
+
+    public boolean Unpark(int emptySlot, Vehicle vehicle2) {
+
+        if(this.vehicles.get(emptySlot)==vehicle2) {
+            vehicles.remove(vehicle2);
+            for(Parkinglot_Observer observer: observer) {
+                observer.setSpaceAvaibility();
+            }
+            parkingCapacity--;
+            return true;
+        }
+        throw new ParkinglotException("VEHICLE_IS_NOT_PRESENT",ParkinglotException.ExceptionType.VEHICLE_IS_NOT_PRESENT);
+    }
 }

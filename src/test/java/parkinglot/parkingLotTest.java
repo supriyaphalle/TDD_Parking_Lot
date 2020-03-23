@@ -105,17 +105,33 @@ public class parkingLotTest {
     }
 
     @Test
-    public void givenASlotNumber_ShouldParkInThatSlot(){
-        parkingLot.setParkingcapacity(5);
-        parkingLot.park(1,vehicle);
-        parkingLot.park(2,vehicle2);
-        parkingLot.park(3,new Vehicle());
-        parkingLot.park(4,new Vehicle());
-        parkingLot.unPark(vehicle2);
-        int emptySlot= parkingLot.getEmptySlot();
-        Vehicle vehicle4 = new Vehicle();
-        parkingLot.park(emptySlot,vehicle4);
-        boolean parked = parkingLot.isParked(vehicle4);
-        Assert.assertTrue(parked);
+    public void givenASlotNumber_ShouldParkInThatSlot() {
+        try {
+            parkingLot.setParkingcapacity(5);
+            parkingLot.park(1, vehicle);
+            parkingLot.park(2, vehicle2);
+            parkingLot.park(3, new Vehicle());
+            parkingLot.park(4, new Vehicle());
+            parkingLot.unPark(vehicle2);
+            int emptySlot = parkingLot.getEmptySlot();
+            Vehicle vehicle4 = new Vehicle();
+            parkingLot.park(emptySlot, vehicle4);
+            boolean parked = parkingLot.isParked(vehicle4);
+            Assert.assertTrue(parked);
+        } catch (ParkinglotException e){}
+    }
+
+    @Test
+    public void givenAVehicle_ShouldRetrnParkingSlotNumber(){
+        try {
+            parkingLot.setParkingcapacity(5);
+            parkingLot.park(2, vehicle);
+            parkingLot.park(1, vehicle2);
+            parkingLot.park(3, new Vehicle());
+            parkingLot.park(4, new Vehicle());
+            int emptySlot = parkingLot.getParkingSlot(vehicle2);
+          boolean unPark = parkingLot.Unpark(emptySlot,vehicle2);
+            Assert.assertTrue(unPark);
+        } catch (ParkinglotException e){}
     }
 }
