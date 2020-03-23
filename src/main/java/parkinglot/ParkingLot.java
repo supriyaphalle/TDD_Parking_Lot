@@ -1,31 +1,58 @@
 package parkinglot;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class ParkingLot {
 
-   // private List<Vehicle> vehicles;
-  //  private List<ParkingLotObserver> observer;
-    private int parkingCapacity;
+    public int parkingCapacity;
     private List<Vehicle> vehicles;
     private List<Parkinglot_Observer> observer;
+    public Map <Integer, Vehicle> attendanceMap;
 
-    public ParkingLot(int capacity) {
+    public ParkingLot(int parkingCapacity) {
+        this.parkingCapacity=parkingCapacity;
         vehicles= new ArrayList<>();
         observer= new ArrayList<>();
+        attendanceMap = new HashMap<>();
+        this.initialiseSlots();
     }
 
-    public boolean park(Vehicle vehicle) throws ParkinglotException {
-        if(this.parkingCapacity ==vehicles.size() ) {
-            for(Parkinglot_Observer observer: observer) {
-                observer.setfullCapacity();
-            }
-            throw new ParkinglotException("Parking_lot_IS_FULL",ParkinglotException.ExceptionType.Parking_lot_IS_FULL);
-        }
-        this.vehicles.add(vehicle);
-        parkingCapacity++;
-        return true;
+    public void setParkingcapacity(int capacity) {
+        this.parkingCapacity = capacity;
+    }
+
+    public void initialiseSlots() {
+       vehicles= new ArrayList<>(Collections.nCopies(parkingCapacity,null));
+    }
+    public int getParkingLotSize(){
+        return vehicles.size();
+    }
+
+
+    public void park(int slot,Vehicle vehicle) throws ParkinglotException {
+
+           /* for (int slot = 0; slot < parkingCapacity; slot++) {
+                if (vehicles.get(slot) == null) {
+                    break;
+                }
+            }*/
+           if(vehicles.contains(null)){
+               vehicles.add(slot,vehicle);
+           }
+           else {
+               for (Parkinglot_Observer observer : observer) {
+                   observer.setfullCapacity();
+               }
+               throw new ParkinglotException("Parking_lot_IS_FULL", ParkinglotException.ExceptionType.Parking_lot_IS_FULL);
+           }
+    }
+
+    public boolean isParked(Vehicle vehicle){
+        if(vehicles.contains(vehicle))
+            return true;
+        return false;
+    }
+    private void parkingAttendance() {
     }
 
 
@@ -35,6 +62,7 @@ public class ParkingLot {
             for(Parkinglot_Observer observer: observer) {
                 observer.setSpaceAvaibility();
             }
+            attendanceMap.remove(parkingCapacity);
             parkingCapacity--;
             return true;
         }
@@ -45,7 +73,13 @@ public class ParkingLot {
         observer.add(observer1);
     }
 
-    public void setParkingcapacity(int capacity) {
-        this.parkingCapacity = capacity;
+
+    public int getEmptySlot() {
+        for(int slot =0; slot< vehicles.size();slot++){
+            if(vehicles.get(slot)==null){
+                return slot;
+            }
+        }
+        throw new ParkinglotException("Parking_lot_IS_FULL", ParkinglotException.ExceptionType.Parking_lot_IS_FULL);
     }
 }
