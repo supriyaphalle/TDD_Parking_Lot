@@ -7,20 +7,21 @@ public class ParkingLot {
     public int parkingCapacity;
     private List<Vehicle> vehicles;
     private List<Parkinglot_Observer> observer;
-//    private long startTimeMilliseconds;
-//    private long endTimeMilliseconds;
-    long totalTimeMin;
+    private parkingLotOwner owner;
 
     public ParkingLot(int parkingCapacity) {
-        this.parkingCapacity = parkingCapacity;
+        owner = new parkingLotOwner();
+        this.setParkingcapacity(parkingCapacity);
         vehicles = new ArrayList<Vehicle>();
         observer = new ArrayList<>();
-        this.initialiseSlots();
+        //this.initialiseSlots();
     }
 
     public void setParkingcapacity(int capacity) {
         this.parkingCapacity = capacity;
     }
+
+
 
     public void initialiseSlots() {
         vehicles = new ArrayList<Vehicle>(Collections.nCopies(parkingCapacity, null));
@@ -32,12 +33,10 @@ public class ParkingLot {
 
 
     public void park(int slot, Vehicle vehicle) throws ParkinglotException {
-        if (vehicles.contains(null)) {
-             vehicle.recordParkTime(System.currentTimeMillis());
-          //  ParkingData parkingData = new ParkingData(vehicle,startTimeMilliseconds);
-
-            vehicles.add(slot,vehicle);
-        } else {
+       if(vehicles.get(slot)== null){
+           vehicle.recordParkTime(System.currentTimeMillis());
+           vehicles.set(slot, vehicle);
+       } else {
             for (Parkinglot_Observer observer : observer) {
                 observer.setfullCapacity();
             }
@@ -52,15 +51,16 @@ public class ParkingLot {
     }
 
     public boolean unPark(Vehicle vehicleObject) {
-        if (this.vehicles.contains(vehicleObject)) {
-            vehicleObject.recordUnparkTime(System.currentTimeMillis());
-            vehicles.remove(vehicleObject);
-            vehicleObject.getTime();
-            for (Parkinglot_Observer observer : observer) {
-                observer.isSpaceAvaibility();
+        for(int slot =0;slot<vehicles.size();slot++) {
+            if(vehicles.get(slot)== vehicleObject) {
+                vehicleObject.recordUnparkTime(System.currentTimeMillis());
+                vehicles.set(slot,null);
+                vehicleObject.recordTime();
+                for (Parkinglot_Observer observer : observer) {
+                    observer.isSpaceAvaibility();
+                }
+                return true;
             }
-            parkingCapacity--;
-            return true;
         }
         throw new ParkinglotException("VEHICLE_IS_NOT_PRESENT", ParkinglotException.ExceptionType.VEHICLE_IS_NOT_PRESENT);
     }
@@ -68,7 +68,6 @@ public class ParkingLot {
     public void register(Parkinglot_Observer observer1) {
         observer.add(observer1);
     }
-
 
 
     public int getEmptySlot() {
@@ -89,16 +88,31 @@ public class ParkingLot {
         throw new ParkinglotException("VEHICLE_IS_NOT_PRESENT", ParkinglotException.ExceptionType.VEHICLE_IS_NOT_PRESENT);
     }
 
-    public boolean Unpark(int emptySlot, Vehicle vehicle2) {
-
-        if (this.vehicles.get(emptySlot) == vehicle2) {
+    public boolean Unpark(int slot, Vehicle vehicle2) {
+        if (this.vehicles.get(slot) == vehicle2) {
             vehicles.remove(vehicle2);
             for (Parkinglot_Observer observer : observer) {
                 observer.isSpaceAvaibility();
             }
-            parkingCapacity--;
             return true;
         }
         throw new ParkinglotException("VEHICLE_IS_NOT_PRESENT", ParkinglotException.ExceptionType.VEHICLE_IS_NOT_PRESENT);
+    }
+
+
+    public void evenlyPark(Vehicle vehicle) {
+       int slot=0;
+        while(slot < vehicles.size()){
+            if((slot%2==0)&& (this.vehicles.get(slot) == null)){
+                park(slot,vehicle);
+                owner.evenlyParked();
+                System.out.println(slot);
+                break;
+            }
+            slot++;
+        }
+        if(slot==vehicles.size()){
+            throw new ParkinglotException("NOT_EMPTY_EVEN_SLOT",ParkinglotException.ExceptionType.NOT_EMPTY_EVEN_SLOT);
+        }
     }
 }

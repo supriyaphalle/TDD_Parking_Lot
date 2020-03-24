@@ -3,6 +3,7 @@ package parkinglot;
 public class parkingLotOwner implements Parkinglot_Observer {
     private boolean isFullCapacity;
     private boolean isTimeRecored;
+    private boolean evenlyParked;
 
     @Override
     public void setfullCapacity() {
@@ -24,5 +25,13 @@ public class parkingLotOwner implements Parkinglot_Observer {
 
     public boolean IsrecordParkedTime() {
         return isTimeRecored;
+    }
+
+    public void evenlyParked(){
+        evenlyParked=true;
+    }
+
+    public boolean isEvenlyParked() {
+        return evenlyParked;
     }
 }

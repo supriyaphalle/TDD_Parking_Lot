@@ -15,10 +15,13 @@ public class Vehicle{
         this.unParkime=unParkTime;
     }
 
-    public void getTime() {
+    public void recordTime() {
         long parkedTime = unParkime - parkTime;
         long totalSecond = parkedTime / 1000;
         totalTimeMin = totalSecond / 60;
         new parkingLotOwner().recordTime();
+    }
+    public long getTime(){
+        return totalTimeMin;
     }
 }
