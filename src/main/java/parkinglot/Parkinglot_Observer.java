@@ -1,7 +1,7 @@
 package parkinglot;
 
 public interface Parkinglot_Observer {
-     void setfullCapacity();
+    void setfullCapacity();
 
-    boolean setSpaceAvaibility();
+    boolean isSpaceAvaibility();
 }
