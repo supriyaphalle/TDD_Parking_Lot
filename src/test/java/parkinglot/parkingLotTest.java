@@ -4,6 +4,8 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.List;
+
 public class parkingLotTest {
 
     ParkingLot parkingLot = null;
@@ -11,16 +13,18 @@ public class parkingLotTest {
     private Vehicle vehicle2 = null;
     AirportSecurity security = null;
     parkingLotOwner owner = null;
+    Lots lots = null;
     private int parkingCapacity = 2;
 
     @Before
     public void setUp() {
-        parkingLot = new ParkingLot(parkingCapacity);
+        parkingLot = new ParkingLot();
         vehicle = new Vehicle();
         vehicle2 = new Vehicle();
         owner = new parkingLotOwner();
         security = new AirportSecurity();
-        parkingLot.setParkingcapacity(2);
+        parkingLot.setParkingcapacity(parkingCapacity);
+        lots = new Lots();
         parkingLot.initialiseSlots();
     }
 
@@ -89,10 +93,10 @@ public class parkingLotTest {
     public void givenWhenParkingLotFull_ShouldInformAirportSecurity() {
         parkingLot.register(security);
         try {
-            parkingLot.park(0, vehicle);
-            parkingLot.park(1, vehicle2);
+            parkingLot.park(1, vehicle);
+            parkingLot.park(0, vehicle2);
         } catch (ParkinglotException e) {
-            boolean isFullCapacity = security.isFullCapacity();
+            boolean isFullCapacity =security.isFullCapacity();
             Assert.assertTrue(isFullCapacity);
         }
     }
@@ -121,15 +125,14 @@ public class parkingLotTest {
         parkingLot.register(owner);
         try {
             parkingLot.setParkingcapacity(5);
-            parkingLot.initialiseSlots();
             parkingLot.park(1, vehicle);
             parkingLot.park(2, vehicle2);
             parkingLot.park(3, new Vehicle());
             parkingLot.park(4, new Vehicle());
             parkingLot.unPark(vehicle2);
-            int emptySlot = parkingLot.getEmptySlot();
+            List emptySlot = parkingLot.getEmptySlot();
             Vehicle vehicle4 = new Vehicle();
-            parkingLot.park(emptySlot, vehicle4);
+            parkingLot.park((Integer) emptySlot.get(0), vehicle4);
             boolean parked = parkingLot.isParked(vehicle4);
             Assert.assertTrue(parked);
         } catch (ParkinglotException e) {
@@ -140,7 +143,6 @@ public class parkingLotTest {
     public void givenAVehicle_ShouldRetrnParkingSlotNumber() {
         try {
             parkingLot.setParkingcapacity(5);
-            parkingLot.initialiseSlots();
             parkingLot.park(2, vehicle);
             parkingLot.park(1, vehicle2);
             parkingLot.park(3, new Vehicle());
@@ -159,47 +161,29 @@ public class parkingLotTest {
             parkingLot.park(1, vehicle);
             boolean b = parkingLot.unPark(vehicle);
         } catch (ParkinglotException e) {
-            //  parkingLot.recordTime();
             boolean timeRecorded = owner.IsrecordParkedTime();
             Assert.assertTrue(timeRecorded);
         }
     }
 
     @Test
-    public void givenAVehicles_ShouldParkEvenly() throws Exception {
-        parkingLot.register(owner);
-        parkingLot.setParkingcapacity(5);
-        parkingLot.initialiseSlots();
-        try {
-            parkingLot.evenlyPark(vehicle);
-            boolean check1 = owner.isEvenlyParked();
-            parkingLot.evenlyPark(vehicle2);
-            boolean check2 = owner.isEvenlyParked();
-            parkingLot.evenlyPark(new Vehicle());
-            boolean check3 = owner.isEvenlyParked();
-            parkingLot.evenlyPark(new Vehicle());
-            Assert.assertTrue(check1 && check2 && check3);
-        } catch (ParkinglotException e) {
-        }
+    public void givenAVehicle_whenParkingLotsAreEmpty_shouldParkInFirstLot() {
+        lots.add(parkingLot);
+        lots.parkVehicle(vehicle);
+        ParkingLot lot = lots.getParkingLotNumber(vehicle);
+        Assert.assertEquals(parkingLot, lot);
     }
 
     @Test
-    public void givenAVehicles_ShouldParkEvenly_throwException()  {
-        parkingLot.register(owner);
-        parkingLot.setParkingcapacity(5);
-        parkingLot.initialiseSlots();
-        try {
-            parkingLot.evenlyPark(vehicle);
-            parkingLot.evenlyPark(vehicle2);
-            parkingLot.evenlyPark(new Vehicle());
-            parkingLot.evenlyPark(new Vehicle());
-            parkingLot.evenlyPark(new Vehicle());
-        } catch (ParkinglotException e) {
-            Assert.assertEquals(ParkinglotException.ExceptionType.NOT_EMPTY_EVEN_SLOT,e.type);
-        }
+    public void givenTwoVehicles_whenParkingLotsAreEmpty_shouldParkEvenly() {
+        lots.add(parkingLot);
+        ParkingLot parkingLot2 = new ParkingLot();
+        parkingLot2.setParkingcapacity(4);
+        lots.parkVehicle(vehicle);
+        lots.add(parkingLot2);
+        lots.parkVehicle(vehicle2);
+        ParkingLot lot = lots.getParkingLotNumber(vehicle2);
+        Assert.assertEquals(parkingLot2, lot);
     }
-
-
-
 
 }

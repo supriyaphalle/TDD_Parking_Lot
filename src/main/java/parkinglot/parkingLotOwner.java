@@ -27,8 +27,8 @@ public class parkingLotOwner implements Parkinglot_Observer {
         return isTimeRecored;
     }
 
-    public void evenlyParked(){
-        evenlyParked=true;
+    public void evenlyParked() {
+        evenlyParked = true;
     }
 
     public boolean isEvenlyParked() {

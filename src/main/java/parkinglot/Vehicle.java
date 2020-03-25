@@ -1,18 +1,19 @@
 package parkinglot;
 
-public class Vehicle{
-     static long parkTime;
+public class Vehicle {
+    static long parkTime;
     private long unParkime;
     private long totalTimeMin;
 
-    public Vehicle() {}
+    public Vehicle() {
+    }
 
-   public void recordParkTime(long parkTime) {
+    public void recordParkTime(long parkTime) {
         this.parkTime = parkTime;
     }
 
     public void recordUnparkTime(long unParkTime) {
-        this.unParkime=unParkTime;
+        this.unParkime = unParkTime;
     }
 
     public void recordTime() {
@@ -21,7 +22,8 @@ public class Vehicle{
         totalTimeMin = totalSecond / 60;
         new parkingLotOwner().recordTime();
     }
-    public long getTime(){
+
+    public long getTime() {
         return totalTimeMin;
     }
 }
