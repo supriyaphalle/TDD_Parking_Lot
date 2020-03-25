@@ -22,7 +22,7 @@ public class ParkingLot {
 
 
     public void initialiseSlots() {
-        vehicles = new ArrayList<Vehicle>(Collections.nCopies(parkingCapacity, null));
+        vehicles = new ArrayList<>(Collections.nCopies(parkingCapacity, null));
     }
 
     public int getParkingLotSize() {
@@ -30,16 +30,27 @@ public class ParkingLot {
     }
 
 
-    public void park(int slot, Vehicle vehicle) throws ParkinglotException {
-        if (vehicles.get(slot) == null) {
-            vehicle.recordParkTime(System.currentTimeMillis());
-            vehicles.set(slot, vehicle);
-        } else {
+    public void park(DriverType type, Vehicle vehicle) throws ParkinglotException {
+        if (!vehicles.contains(null)) {
             for (Parkinglot_Observer observer : observer) {
                 observer.setfullCapacity();
             }
             throw new ParkinglotException("Parking_lot_IS_FULL", ParkinglotException.ExceptionType.Parking_lot_IS_FULL);
         }
+        int slot = getslot(type);
+        vehicle.recordParkTime(System.currentTimeMillis());
+        vehicles.set(slot, vehicle);
+    }
+
+    private int getslot(DriverType type) {
+        List emptySlot = getEmptySlot();
+        if (type.equals(DriverType.HANDICAP)) {
+            return (int) emptySlot.get(0);
+        }
+        if (type.equals(DriverType.NORMAL)) {
+            return (int) emptySlot.get(emptySlot.size() - 1);
+        }
+        return 0;
     }
 
     public boolean isParked(Vehicle vehicle) {
@@ -98,5 +109,8 @@ public class ParkingLot {
         throw new ParkinglotException("VEHICLE_IS_NOT_PRESENT", ParkinglotException.ExceptionType.VEHICLE_IS_NOT_PRESENT);
     }
 
-
+    public void parkAsPerSlot(Integer slot, Vehicle vehicle) {
+        vehicle.recordParkTime(System.currentTimeMillis());
+        vehicles.set(slot, vehicle);
+    }
 }

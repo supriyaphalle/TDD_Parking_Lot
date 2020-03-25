@@ -16,14 +16,13 @@ public class Lots {
         parkingLotList.add(parkingLot);
     }
 
-    public void parkVehicle(Vehicle vehicle) {
+    public void parkVehicle(DriverType type, Vehicle vehicle) {
         Comparator<ParkingLot> sort = Comparator.comparing(parkingLot -> parkingLot.getEmptySlot().size(), Comparator.reverseOrder());
         Collections.sort(parkingLotList, sort);
         ParkingLot parkingLot = parkingLotList.get(0);
         List emptySlot = parkingLot.getEmptySlot();
-        parkingLot.park((Integer) emptySlot.get(0), vehicle);
+        parkingLot.park(type, vehicle);
     }
-
 
     public ParkingLot getParkingLotNumber(Vehicle vehicle) {
         ParkingLot parkingLot = null;
