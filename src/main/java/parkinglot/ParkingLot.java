@@ -59,7 +59,7 @@ public class ParkingLot {
         return false;
     }
 
-    public boolean unPark(Vehicle vehicleObject) {
+    public boolean unPark(Vehicle vehicleObject) throws ParkinglotException {
         for (int slot = 0; slot < vehicles.size(); slot++) {
             if (vehicles.get(slot) == vehicleObject) {
                 vehicleObject.recordUnparkTime(System.currentTimeMillis());
