@@ -5,10 +5,11 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-public class Lots {
+public class ParkingSystem {
+
     public List<ParkingLot> parkingLotList;
 
-    public Lots() {
+    public ParkingSystem() {
         parkingLotList = new ArrayList<>();
     }
 
@@ -20,7 +21,6 @@ public class Lots {
         Comparator<ParkingLot> sort = Comparator.comparing(parkingLot -> parkingLot.getEmptySlot().size(), Comparator.reverseOrder());
         Collections.sort(parkingLotList, sort);
         ParkingLot parkingLot = parkingLotList.get(0);
-        List emptySlot = parkingLot.getEmptySlot();
         parkingLot.park(type, vehicle);
     }
 
@@ -34,4 +34,5 @@ public class Lots {
         }
         return parkingLot;
     }
+
 }
