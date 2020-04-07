@@ -2,44 +2,41 @@ package parkinglot;
 
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 public class ParkingSlots {
-     LocalDateTime time;
-    Vehicle vehicle = null;
-    private long parkTime;
-    private long unParkime;
+     LocalDateTime time,UnparkTime;
+    Vehicle vehicle ;
+   int slot;
 
-
-    public ParkingSlots(Vehicle vehicle, LocalDateTime time) {
+    public ParkingSlots(Vehicle vehicle, int slot) {
         this.vehicle = vehicle;
-        this.time=time;
+        this.slot=slot;
+        this.time=LocalDateTime.now();
     }
 
     public Vehicle getVehicle() {
         return vehicle;
     }
 
-    public void recordParkTime(long parkTime) {
-        this.parkTime =
-                parkTime;
+    public void recordUnparkTime(LocalDateTime currentTimeMillis) {
+        UnparkTime = currentTimeMillis;
     }
 
-    public void recordUnparkTime(long unParkTime) {
-        this.unParkime = unParkTime;
+    public int getTime(){
+        return UnparkTime.getMinute() - time.getMinute();
+
     }
-
-
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-
         ParkingSlots that = (ParkingSlots) o;
-
-        if (time != that.time) return false;
-        return vehicle != null ? vehicle.equals(that.vehicle) : that.vehicle == null;
+        return Objects.equals(vehicle, that.vehicle);
     }
 
 
+    public int getSlot() {
+        return slot;
+    }
 }
