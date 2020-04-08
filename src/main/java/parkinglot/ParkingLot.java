@@ -26,7 +26,7 @@ public class ParkingLot {
 
 
     public List getEmptySlot() {
-        List emptyParkingSlots = new ArrayList();
+        List<Integer> emptyParkingSlots = new ArrayList();
         for (int slot = 0; slot < parkingSlotsList.size(); slot++) {
             if (parkingSlotsList.get(slot) == null) {
                 emptyParkingSlots.add(slot);
@@ -55,7 +55,7 @@ public class ParkingLot {
         if (isParked(vehicle)) {
             throw new ParkingLotException("Vehicle already parked", ParkingLotException.ExceptionType.VEHICLE_ALREADY_PARKED);
         }
-        int slot = getslot(driverType);
+        int slot = getslot(driverType, vehicle.type);
         ParkingSlots parkingSlot = new ParkingSlots(vehicle, slot);
         parkingSlotsList.set(slot, parkingSlot);
     }
@@ -65,9 +65,30 @@ public class ParkingLot {
         parkingSlotsList.set(slot, parkingSlot);
     }
 
-    private int getslot(DriverType type) {
-        List  emptySlot = getEmptySlot();
-        return type.getSlot(emptySlot);
+    private int getslot(DriverType type, Vehicle.VehicleType vehicleType) {
+        List<Integer> emptySlot = getEmptySlot();
+        List<Integer> slot = type.getSlot(emptySlot);
+        int i = slot.get(0);
+        if (i == 0 || i == parkingSlotsList.size() - 1) {
+            return i;
+        }
+        ParkingSlots slot1 = (type == DriverType.NORMAL ? parkingSlotsList.get(i + 1) : parkingSlotsList.get(i - 1));
+        ParkingSlots slot2 = (type == DriverType.NORMAL ? parkingSlotsList.get(i - 1) : parkingSlotsList.get(i + 1));
+        if (vehicleType == Vehicle.VehicleType.SMALL_CAR) {
+            if (slot2 != null) {
+                if ((slot1.getVehicle().type == Vehicle.VehicleType.LARGE_CAR || slot2.getVehicle().type == Vehicle.VehicleType.LARGE_CAR) && (slot.size() > 2)) {
+                    return slot.get(2);
+                }
+            }
+            return i;
+        }
+        if (vehicleType == Vehicle.VehicleType.LARGE_CAR) {
+            if(slot2 == null) {
+                return slot.get(1);
+            }
+            return slot.get(2);
+        }
+        return slot.get(0);
     }
 
     public boolean isParked(Vehicle vehicle) {
@@ -89,7 +110,7 @@ public class ParkingLot {
     public boolean unPark(int slot, Vehicle vehicle) {
         if (parkingSlotsList.get(slot).getVehicle().equals(vehicle)) {
             parkingSlotsList.get(slot).recordUnparkTime(LocalDateTime.now());
-            new ParkingLotOwner().notifyTime( parkingSlotsList.get(slot).getTime());
+            new ParkingLotOwner().notifyTime(parkingSlotsList.get(slot).getTime());
             parkingSlotsList.set(slot, null);
             informer.notifySpaceAvailableUpdate();
             return true;
@@ -102,8 +123,8 @@ public class ParkingLot {
         return unPark(parkingSlot, vehicle);
     }
 
-    int getParkingTime(Vehicle vehicle){
+    int getParkingTime(Vehicle vehicle) {
         int slot = this.findVehicle(vehicle);
-        return  parkingSlotsList.get(slot).getTime();
+        return parkingSlotsList.get(slot).getTime();
     }
 }

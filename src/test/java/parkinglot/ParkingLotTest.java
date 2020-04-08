@@ -10,7 +10,7 @@ import java.util.List;
 public class ParkingLotTest {
     AirportSecurity security = null;
     ParkingLotOwner owner = null;
-    ParkingLot parkingLot = null ;
+    ParkingLot parkingLot = null;
     private Vehicle vehicle = null;
     private Vehicle vehicle2 = null;
     private int parkingCapacity = 2;
@@ -51,8 +51,8 @@ public class ParkingLotTest {
             parkingLot.park(parkinglot.DriverType.NORMAL, vehicle);
             parkingLot.park(parkinglot.DriverType.NORMAL, vehicle2);
             parkingLot.park(parkinglot.DriverType.NORMAL, new parkinglot.Vehicle(Vehicle.VehicleType.SMALL_CAR));
-        }catch (parkinglot.ParkingLotException e){
-            Assert.assertEquals(parkinglot.ParkingLotException.ExceptionType.Parking_lot_IS_FULL,e.type);
+        } catch (parkinglot.ParkingLotException e) {
+            Assert.assertEquals(parkinglot.ParkingLotException.ExceptionType.Parking_lot_IS_FULL, e.type);
         }
     }
 
@@ -115,7 +115,7 @@ public class ParkingLotTest {
         }
     }
 
-   //UC6
+    //UC6
     @Test
     public void givenASlotNumber_ShouldParkInThatSlot() {
         parkingLot.register(owner);
@@ -161,23 +161,23 @@ public class ParkingLotTest {
             parkingLot.park(parkinglot.DriverType.NORMAL, vehicle2);
             int slot = parkingLot.findVehicle(new Vehicle(Vehicle.VehicleType.SMALL_CAR));
         } catch (ParkingLotException e) {
-           Assert.assertEquals(ParkingLotException.ExceptionType.VEHICLE_IS_NOT_PRESENT,e.type);
+            Assert.assertEquals(ParkingLotException.ExceptionType.VEHICLE_IS_NOT_PRESENT, e.type);
         }
     }
 
     @Test
-    public void givenAVehicle_WhenParked_ShouldRecordTime(){
-        parkingLot.park(DriverType.NORMAL,vehicle);
+    public void givenAVehicle_WhenParked_ShouldRecordTime() {
+        parkingLot.park(DriverType.NORMAL, vehicle);
         LocalDateTime time1 = LocalDateTime.now();
         parkingLot.unPark(vehicle);
         LocalDateTime time2 = LocalDateTime.now();
-        int time = time2.getMinute()- time1.getMinute();
+        int time = time2.getMinute() - time1.getMinute();
         int parkedtime = new ParkingLotOwner().getTime();
-        Assert.assertEquals(time,parkedtime);
+        Assert.assertEquals(time, parkedtime);
 
     }
 
-//UC9
+    //UC9
     @Test
     public void givenAVehicle_whenParkingLotsAreEmpty_shouldParkInFirstLot() {
         parkingSystem.add(parkingLot);
@@ -185,7 +185,8 @@ public class ParkingLotTest {
         parkinglot.ParkingLot lot = parkingSystem.getParkingLotNumber(vehicle);
         Assert.assertEquals(parkingLot, lot);
     }
-//UC9
+
+    //UC9
     @Test
     public void givenTwoVehicles_whenParkingLotsAreEmpty_shouldParkEvenly() {
         parkingSystem.add(parkingLot);
@@ -210,7 +211,7 @@ public class ParkingLotTest {
         Assert.assertEquals(parkingLot2, lot);
     }
 
-//UC10
+    //UC10
     @Test
     public void givenTwoVehicles_whenDriveTypeProvided_shouldParkAccordingly() {
         parkingSystem.add(parkingLot);
@@ -236,6 +237,84 @@ public class ParkingLotTest {
         Assert.assertEquals(0, slot);
     }
 
+    ////UC11
+    @Test
+    public void givenLargeVehicle_ShouldParkWith_NoImmidiateVehicle() {
+        parkingLot.setParkingcapacity(5);
+        Vehicle vehicle3 = new Vehicle(Vehicle.VehicleType.LARGE_CAR);
+        Vehicle vehicle4 = new Vehicle(Vehicle.VehicleType.LARGE_CAR);
+        Vehicle vehicle5 = new Vehicle(Vehicle.VehicleType.LARGE_CAR);
 
-
+        parkingSystem.add(parkingLot);
+        parkingLot.park(DriverType.NORMAL, vehicle3);
+        parkingLot.park(DriverType.NORMAL, vehicle4);
+        parkingLot.park(DriverType.NORMAL, vehicle5);
+        int slot = parkingLot.findVehicle(vehicle3);
+        int slot1 = parkingLot.findVehicle(vehicle4);
+        int slot2 = parkingLot.findVehicle(vehicle5);
+        Assert.assertEquals(4, slot);
+        Assert.assertEquals(2, slot1);
+        Assert.assertEquals(0, slot2);
     }
+
+    @Test
+    public void givenLargeVehicle_ShouldParkWith_NoImmidiateVehicleParked() {
+        parkingLot.setParkingcapacity(5);
+        Vehicle vehicle3 = new Vehicle(Vehicle.VehicleType.LARGE_CAR);
+        Vehicle vehicle4 = new Vehicle(Vehicle.VehicleType.LARGE_CAR);
+        Vehicle vehicle5 = new Vehicle(Vehicle.VehicleType.SMALL_CAR);
+        Vehicle vehicle6 = new Vehicle(Vehicle.VehicleType.SMALL_CAR);
+
+        parkingSystem.add(parkingLot);
+        parkingLot.park(DriverType.NORMAL, vehicle3);
+        parkingLot.park(DriverType.NORMAL, vehicle4);
+        parkingLot.park(DriverType.NORMAL, vehicle5);
+        parkingLot.park(DriverType.NORMAL, vehicle6);
+        int slot = parkingLot.findVehicle(vehicle3);
+        int slot1 = parkingLot.findVehicle(vehicle4);
+        int slot2 = parkingLot.findVehicle(vehicle5);
+        int slot3 = parkingLot.findVehicle(vehicle6);
+        Assert.assertEquals(3, slot3);
+        Assert.assertEquals(2, slot1);
+        Assert.assertEquals(0, slot2);
+    }
+
+    ////UC11
+    @Test
+    public void givenLargeVehicle_ShouldPark_withonAlternateslot() {
+        ParkingLot parkingLot2 = new ParkingLot();
+        ParkingLot parkingLot3 = new ParkingLot();
+        ParkingLot parkingLot4 = new ParkingLot();
+        ParkingLot parkingLot5 = new ParkingLot();
+        parkingLot.setParkingcapacity(5);
+        parkingLot2.setParkingcapacity(5);
+        parkingLot3.setParkingcapacity(5);
+        parkingLot4.setParkingcapacity(5);
+        parkingLot5.setParkingcapacity(5);
+
+        Vehicle vehicle3 = new Vehicle(Vehicle.VehicleType.SMALL_CAR);
+        Vehicle vehicle4 = new Vehicle(Vehicle.VehicleType.SMALL_CAR);
+        Vehicle vehicle5 = new Vehicle(Vehicle.VehicleType.SMALL_CAR);
+        Vehicle vehicle6 = new Vehicle(Vehicle.VehicleType.SMALL_CAR);
+        Vehicle vehicle7 = new Vehicle(Vehicle.VehicleType.LARGE_CAR);
+        Vehicle vehicle8 = new Vehicle(Vehicle.VehicleType.SMALL_CAR);
+        parkingSystem.add(parkingLot);
+        parkingSystem.add(parkingLot2);
+        parkingSystem.add(parkingLot3);
+        parkingSystem.add(parkingLot4);
+        parkingSystem.add(parkingLot5);
+
+        parkingSystem.parkVehicle(DriverType.NORMAL, vehicle);
+        parkingSystem.parkVehicle(DriverType.NORMAL, vehicle2);
+        parkingSystem.parkVehicle(DriverType.NORMAL, vehicle3);
+        parkingSystem.parkVehicle(DriverType.NORMAL, vehicle4);
+        parkingSystem.parkVehicle(DriverType.NORMAL, vehicle5);
+        parkingSystem.parkVehicle(DriverType.NORMAL, vehicle6);
+        parkingSystem.parkVehicle(DriverType.NORMAL, vehicle7);
+        parkingSystem.parkVehicle(DriverType.NORMAL, vehicle8);
+        ParkingLot parkingLotNumber = parkingSystem.getParkingLotNumber(vehicle7);
+        int slot = parkingLotNumber.findVehicle(vehicle7);
+        Assert.assertEquals(2, slot);
+    }
+
+}

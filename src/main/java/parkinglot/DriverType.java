@@ -7,18 +7,20 @@ import java.util.stream.Collectors;
 public enum DriverType {
     NORMAL {
         @Override
-        public int getSlot(List emptySlot) {
-            return (int) emptySlot.get(emptySlot.size()-1);
+        public List getSlot(List emptySlot) {
+           return (List) emptySlot.stream().sorted(Comparator.reverseOrder()).collect(Collectors.toList());
+            //return (int) emptySlot.get(emptySlot.size()-1);
         }
     },
     HANDICAP {
         @Override
-        public int getSlot(List emptySlot) {
-            return (int) emptySlot.get(0);
+        public List getSlot(List emptySlot) {
+            return  emptySlot;
 
         }
     };
 
-    public abstract int getSlot(List emptySlot);
+    public abstract List getSlot(List emptySlot);
+
 }
 
