@@ -317,33 +317,34 @@ public class ParkingLotTest {
         int slot = parkingLotNumber.findVehicle(vehicle7);
         Assert.assertEquals(2, slot);
     }
+
     //UC12
     @Test
-    public void givenAVehicle_WhenParked_ShouldReturnAllSlotNoOfWhiteCars(){
-        Vehicle vehicle3 = new Vehicle(Vehicle.VehicleType.SMALL_CAR,"Black", "TOYOTA", "DF1AW5410");
-        Vehicle vehicle4 = new Vehicle(Vehicle.VehicleType.SMALL_CAR,"White", "TOYOTA", "DF1AW5410");
-        Vehicle vehicle5 = new Vehicle(Vehicle.VehicleType.SMALL_CAR,"Red", "TOYOTA", "DF1AW5410");
-        Vehicle vehicle6 = new Vehicle(Vehicle.VehicleType.SMALL_CAR,"White", "TOYOTA", "DF1AW5410");
-        Vehicle vehicle7 = new Vehicle(Vehicle.VehicleType.LARGE_CAR,"Yellow", "TOYOTA", "DF1AW5410");
-        Vehicle vehicle8 = new Vehicle(Vehicle.VehicleType.SMALL_CAR,"Blue", "TOYOTA", "DF1AW5410");
+    public void givenAVehicle_WhenParked_ShouldReturnAllSlotNoOfWhiteCars() {
+        Vehicle vehicle3 = new Vehicle(Vehicle.VehicleType.SMALL_CAR, "Black", "TOYOTA", "DF1AW5410");
+        Vehicle vehicle4 = new Vehicle(Vehicle.VehicleType.SMALL_CAR, "White", "TOYOTA", "DF1AW5410");
+        Vehicle vehicle5 = new Vehicle(Vehicle.VehicleType.SMALL_CAR, "Red", "TOYOTA", "DF1AW5410");
+        Vehicle vehicle6 = new Vehicle(Vehicle.VehicleType.SMALL_CAR, "White", "TOYOTA", "DF1AW5410");
+        Vehicle vehicle7 = new Vehicle(Vehicle.VehicleType.LARGE_CAR, "Yellow", "TOYOTA", "DF1AW5410");
+        Vehicle vehicle8 = new Vehicle(Vehicle.VehicleType.SMALL_CAR, "Blue", "TOYOTA", "DF1AW5410");
         parkingLot.setParkingcapacity(10);
-        parkingLot.park(DriverType.NORMAL,vehicle);
-        parkingLot.park(DriverType.HANDICAP,vehicle2);
-        parkingLot.park(DriverType.NORMAL,vehicle3);
-        parkingLot.park(DriverType.NORMAL,vehicle4);
-        parkingLot.park(DriverType.NORMAL,vehicle5);
-        parkingLot.park(DriverType.HANDICAP,vehicle6);
-        parkingLot.park(DriverType.NORMAL,vehicle7);
-        parkingLot.park(DriverType.NORMAL,vehicle8);
-        List <Integer> whiteCars= parkingLot.getSlotOfParkedCarAsPerColor("White");
-        List<Integer> slot=new ArrayList<>();
+        parkingLot.park(DriverType.NORMAL, vehicle);
+        parkingLot.park(DriverType.HANDICAP, vehicle2);
+        parkingLot.park(DriverType.NORMAL, vehicle3);
+        parkingLot.park(DriverType.NORMAL, vehicle4);
+        parkingLot.park(DriverType.NORMAL, vehicle5);
+        parkingLot.park(DriverType.HANDICAP, vehicle6);
+        parkingLot.park(DriverType.NORMAL, vehicle7);
+        parkingLot.park(DriverType.NORMAL, vehicle8);
+        List<Integer> whiteCars = parkingLot.getSlotOfParkedCarAsPerColor("White");
+        List<Integer> slot = new ArrayList<>();
         slot.add(1);
         slot.add(7);
-        Assert.assertEquals(slot,whiteCars);
+        Assert.assertEquals(slot, whiteCars);
     }
 
     @Test
-    public void givenAVehicle_WhenNotgetRequiredColor_ShouldThrowException(){
+    public void givenAVehicle_WhenNotgetRequiredColor_ShouldThrowException() {
         try {
             Vehicle vehicle3 = new Vehicle(Vehicle.VehicleType.SMALL_CAR, "Black", "TOYOTA", "DF1AW5410");
             Vehicle vehicle4 = new Vehicle(Vehicle.VehicleType.SMALL_CAR, "Blue", "TOYOTA", "DF1AW5410");
@@ -355,39 +356,39 @@ public class ParkingLotTest {
             parkingLot.park(DriverType.NORMAL, vehicle4);
             parkingLot.park(DriverType.NORMAL, vehicle5);
             List<Integer> whiteCars = parkingLot.getSlotOfParkedCarAsPerColor("White");
-        }catch (ParkingLotException e){
-            Assert.assertEquals(ParkingLotException.ExceptionType.VEHICLE_IS_NOT_PRESENT,e.type);
+        } catch (ParkingLotException e) {
+            Assert.assertEquals(ParkingLotException.ExceptionType.VEHICLE_IS_NOT_PRESENT, e.type);
         }
     }
 
     //UC13
 
     @Test
-    public void givenAVehicle_WhenParked_ShouldReturnInformation_BasedOnModelOfVehicle(){
-        Vehicle vehicle3 = new Vehicle(Vehicle.VehicleType.SMALL_CAR,"Black","Toyota","MH5PQ3456");
-        Vehicle vehicle4 = new Vehicle(Vehicle.VehicleType.SMALL_CAR,"White","BMW","MH5Pt6456");
-        Vehicle vehicle5 = new Vehicle(Vehicle.VehicleType.SMALL_CAR,"Red","ODDY","MH5OW3456");
-        Vehicle vehicle6 = new Vehicle(Vehicle.VehicleType.SMALL_CAR,"White","SUZUKI","MH6QQ346");
-        Vehicle vehicle7 = new Vehicle(Vehicle.VehicleType.SMALL_CAR,"Yellow","SCODA","HA2PF4567");
-        Vehicle vehicle8 = new Vehicle(Vehicle.VehicleType.SMALL_CAR,"Blue","Toyota","DF1AW5410");
+    public void givenAVehicle_WhenParked_ShouldReturnInformation_BasedOnModelOfVehicleAndColor() {
+        Vehicle vehicle3 = new Vehicle(Vehicle.VehicleType.SMALL_CAR, "Black", "Toyota", "MH5PQ3456");
+        Vehicle vehicle4 = new Vehicle(Vehicle.VehicleType.SMALL_CAR, "White", "BMW", "MH5Pt6456");
+        Vehicle vehicle5 = new Vehicle(Vehicle.VehicleType.SMALL_CAR, "Red", "ODDY", "MH5OW3456");
+        Vehicle vehicle6 = new Vehicle(Vehicle.VehicleType.SMALL_CAR, "White", "SUZUKI", "MH6QQ346");
+        Vehicle vehicle7 = new Vehicle(Vehicle.VehicleType.SMALL_CAR, "Yellow", "SCODA", "HA2PF4567");
+        Vehicle vehicle8 = new Vehicle(Vehicle.VehicleType.SMALL_CAR, "Blue", "Toyota", "DF1AW5410");
         parkingLot.setParkingcapacity(10);
-        parkingLot.park(DriverType.NORMAL,vehicle);
-        parkingLot.park(DriverType.HANDICAP,vehicle2);
-        parkingLot.park(DriverType.NORMAL,vehicle3);
-        parkingLot.park(DriverType.NORMAL,vehicle4);
-        parkingLot.park(DriverType.NORMAL,vehicle5);
-        parkingLot.park(DriverType.HANDICAP,vehicle6);
-        parkingLot.park(DriverType.NORMAL,vehicle7);
-        parkingLot.park(DriverType.NORMAL,vehicle8);
-        List <String> cars= parkingLot.getSlotOfParkedCarsAsPerModel("Toyota","Blue");
-        List <String> cars1= new ArrayList<>();
+        parkingLot.park(DriverType.NORMAL, vehicle);
+        parkingLot.park(DriverType.HANDICAP, vehicle2);
+        parkingLot.park(DriverType.NORMAL, vehicle3);
+        parkingLot.park(DriverType.NORMAL, vehicle4);
+        parkingLot.park(DriverType.NORMAL, vehicle5);
+        parkingLot.park(DriverType.HANDICAP, vehicle6);
+        parkingLot.park(DriverType.NORMAL, vehicle7);
+        parkingLot.park(DriverType.NORMAL, vehicle8);
+        List<String> cars = parkingLot.getSlotOfParkedCarsAsPerModelAndColor("Toyota", "Blue");
+        List<String> cars1 = new ArrayList<>();
         cars1.add("Toyota: Slot:4 NumberPlate:DF1AW5410");
-        Assert.assertEquals(cars1,cars);
+        Assert.assertEquals(cars1, cars);
     }
 
 
     @Test
-    public void givenAVehicle_WhenNotgetRequiredModelWithColor_ShouldThrowException(){
+    public void givenAVehicle_WhenNotgetRequiredModelWithColor_ShouldThrowException() {
         try {
             Vehicle vehicle3 = new Vehicle(Vehicle.VehicleType.SMALL_CAR, "Black", "Maruti", "DF1AW5410");
             Vehicle vehicle4 = new Vehicle(Vehicle.VehicleType.SMALL_CAR, "White", "BMW", "DF1AW5410");
@@ -398,10 +399,55 @@ public class ParkingLotTest {
             parkingLot.park(DriverType.NORMAL, vehicle3);
             parkingLot.park(DriverType.NORMAL, vehicle4);
             parkingLot.park(DriverType.NORMAL, vehicle5);
-            List <String> cars= parkingLot.getSlotOfParkedCarsAsPerModel("Toyota","Blue");
-        }catch (ParkingLotException e){
-            Assert.assertEquals(ParkingLotException.ExceptionType.VEHICLE_IS_NOT_PRESENT,e.type);
+            List<String> cars = parkingLot.getSlotOfParkedCarsAsPerModelAndColor("Toyota", "Blue");
+        } catch (ParkingLotException e) {
+            Assert.assertEquals(ParkingLotException.ExceptionType.VEHICLE_IS_NOT_PRESENT, e.type);
         }
     }
+
+    //UC13
+
+    @Test
+    public void givenAVehicle_WhenParked_ShouldReturnInformation_BasedOnModelOfVehicle() {
+        Vehicle vehicle3 = new Vehicle(Vehicle.VehicleType.SMALL_CAR, "Black", "Toyota", "MH5PQ3456");
+        Vehicle vehicle4 = new Vehicle(Vehicle.VehicleType.SMALL_CAR, "White", "BMW", "MH5Pt6456");
+        Vehicle vehicle5 = new Vehicle(Vehicle.VehicleType.SMALL_CAR, "Red", "ODDY", "MH5OW3456");
+        Vehicle vehicle6 = new Vehicle(Vehicle.VehicleType.SMALL_CAR, "White", "SUZUKI", "MH6QQ346");
+        Vehicle vehicle7 = new Vehicle(Vehicle.VehicleType.SMALL_CAR, "Yellow", "SCODA", "HA2PF4567");
+        Vehicle vehicle8 = new Vehicle(Vehicle.VehicleType.SMALL_CAR, "Blue", "Toyota", "DF1AW5410");
+        parkingLot.setParkingcapacity(10);
+        parkingLot.park(DriverType.NORMAL, vehicle);
+        parkingLot.park(DriverType.HANDICAP, vehicle2);
+        parkingLot.park(DriverType.NORMAL, vehicle3);
+        parkingLot.park(DriverType.NORMAL, vehicle4);
+        parkingLot.park(DriverType.NORMAL, vehicle5);
+        parkingLot.park(DriverType.HANDICAP, vehicle6);
+        parkingLot.park(DriverType.NORMAL, vehicle7);
+        parkingLot.park(DriverType.NORMAL, vehicle8);
+        List<Integer> cars = parkingLot.getSlotOfParkedCarsAsPerModel("BMW");
+        List<Integer> cars1 = new ArrayList<>();
+        cars1.add(7);
+        Assert.assertEquals(cars1, cars);
+    }
+
+
+    @Test
+    public void givenAVehicle_WhenNotgetRequiredModel_ShouldThrowException() {
+        try {
+            Vehicle vehicle3 = new Vehicle(Vehicle.VehicleType.SMALL_CAR, "Black", "Maruti", "DF1AW5410");
+            Vehicle vehicle4 = new Vehicle(Vehicle.VehicleType.SMALL_CAR, "White", "Scoda", "DF1AW5410");
+            Vehicle vehicle5 = new Vehicle(Vehicle.VehicleType.SMALL_CAR, "Red", "Toyota", "DF1AW5410");
+            parkingLot.setParkingcapacity(8);
+            parkingLot.park(DriverType.NORMAL, vehicle);
+            parkingLot.park(DriverType.HANDICAP, vehicle2);
+            parkingLot.park(DriverType.NORMAL, vehicle3);
+            parkingLot.park(DriverType.NORMAL, vehicle4);
+            parkingLot.park(DriverType.NORMAL, vehicle5);
+            List<Integer> cars = parkingLot.getSlotOfParkedCarsAsPerModel("BMW");
+        } catch (ParkingLotException e) {
+            Assert.assertEquals(ParkingLotException.ExceptionType.VEHICLE_IS_NOT_PRESENT, e.type);
+        }
+    }
+
 
 }

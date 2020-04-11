@@ -137,7 +137,7 @@ public class ParkingLot {
         return slot;
     }
 
-    public List<String> getSlotOfParkedCarsAsPerModel(String model, String color) {
+    public List<String> getSlotOfParkedCarsAsPerModelAndColor(String model, String color) {
         List slot = new ArrayList<>();
         for (ParkingSlots slots : parkingSlotsList) {
             if (slots != null && slots.getModel().equals(model) && slots.getColor().equals(color)) {
@@ -149,4 +149,19 @@ public class ParkingLot {
         }
         return slot;
     }
+
+    public List<Integer> getSlotOfParkedCarsAsPerModel(String model) {
+        List slot = new ArrayList<>();
+        for (ParkingSlots slots : parkingSlotsList) {
+            if (slots != null && slots.getModel().equals(model)) {
+                slot.add(slots.getSlot());
+            }
+        }
+        if (slot.equals(null)) {
+            throw new ParkingLotException("Vehicle not Present", ParkingLotException.ExceptionType.VEHICLE_IS_NOT_PRESENT);
+        }
+        return slot;
+    }
+
+
 }
