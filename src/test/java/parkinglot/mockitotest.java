@@ -24,10 +24,10 @@ public class mockitotest {
     @Before
     public void setUp() {
     parkingLot= mock(ParkingLot.class);
-        vehicle = new Vehicle(Vehicle.VehicleType.SMALL_CAR, "Blue", "TOYOTA", "DF1AW5410");
-        vehicle2 = new Vehicle(Vehicle.VehicleType.SMALL_CAR, "Blue", "TOYOTA", "DF1AW5410");
+        vehicle = new Vehicle(VehicleType.SMALL_CAR, "Blue", "TOYOTA", "DF1AW5410");
+        vehicle2 = new Vehicle(VehicleType.SMALL_CAR, "Blue", "TOYOTA", "DF1AW5410");
         owner = new ParkingLotOwner();
-        parkingLot.setParkingcapacity(parkingCapacity);
+        parkingLot.setParkingCapacity(parkingCapacity);
         parkingSystem = new ParkingSystem();
         parkingLot.initialiseSlots();
     }

@@ -9,7 +9,6 @@ public enum DriverType {
         @Override
         public List getSlot(List emptySlot) {
            return (List) emptySlot.stream().sorted(Comparator.reverseOrder()).collect(Collectors.toList());
-            //return (int) emptySlot.get(emptySlot.size()-1);
         }
     },
     HANDICAP {

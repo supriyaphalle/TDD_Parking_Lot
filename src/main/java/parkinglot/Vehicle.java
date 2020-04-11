@@ -4,9 +4,7 @@ public class Vehicle {
     public String modelName;
     public String numberPlate;
 
-    public  enum  VehicleType{
-        LARGE_CAR,SMALL_CAR;
-    }
+
 
      VehicleType type;
     public String color;

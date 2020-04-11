@@ -26,14 +26,6 @@ public class ParkingSlots {
     public LocalDateTime getTime(){
         return time;
     }
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        ParkingSlots that = (ParkingSlots) o;
-        return Objects.equals(vehicle, that.vehicle);
-    }
-
 
     public int getSlot() {
         return slot;
@@ -54,4 +46,13 @@ public class ParkingSlots {
         int i = UnparkTime.getMinute() - time.getMinute();
         return i;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ParkingSlots that = (ParkingSlots) o;
+        return Objects.equals(vehicle, that.vehicle);
+    }
+
 }

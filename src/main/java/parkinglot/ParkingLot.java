@@ -4,7 +4,6 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import static java.util.stream.Collectors.toList;
@@ -18,7 +17,7 @@ public class ParkingLot {
         parkingSlotsList = new ArrayList<>();
     }
 
-    public void setParkingcapacity(int capacity) {
+    public void setParkingCapacity(int capacity) {
         this.parkingCapacity = capacity;
         this.initialiseSlots();
     }
@@ -27,20 +26,11 @@ public class ParkingLot {
         parkingSlotsList = new ArrayList<>(Collections.nCopies(parkingCapacity, null));
     }
 
-
     public List getEmptySlot() {
-        List<Integer> emptyParkingSlots = IntStream.range(0,parkingSlotsList.size())
-                                            .filter(i->parkingSlotsList.get(i)== null)
-                                            .mapToObj(i->i)
-                                            .collect(toList());
-        /*
-                new ArrayList();
-        for (int slot = 0; slot < parkingSlotsList.size(); slot++) {
-            if (parkingSlotsList.get(slot) == null) {
-                emptyParkingSlots.add(slot);
-            }
-        }*/
-        return emptyParkingSlots;
+        return IntStream.range(0, parkingSlotsList.size())
+                .filter(i -> parkingSlotsList.get(i) == null)
+                .mapToObj(i -> i)
+                .collect(toList());
     }
 
     public void register(ParkinglotObserver observer1) {
@@ -65,7 +55,7 @@ public class ParkingLot {
         parkingSlotsList.set(slot, parkingSlot);
     }
 
-    private int getslot(DriverType type, Vehicle.VehicleType vehicleType) {
+    private int getslot(DriverType type, VehicleType vehicleType) {
         List<Integer> emptySlot = getEmptySlot();
         List<Integer> slot = type.getSlot(emptySlot);
         int i = slot.get(0);
@@ -74,21 +64,7 @@ public class ParkingLot {
         }
         ParkingSlots slot1 = (type == DriverType.NORMAL ? parkingSlotsList.get(i + 1) : parkingSlotsList.get(i - 1));
         ParkingSlots slot2 = (type == DriverType.NORMAL ? parkingSlotsList.get(i - 1) : parkingSlotsList.get(i + 1));
-        if (vehicleType == Vehicle.VehicleType.SMALL_CAR) {
-            if (slot2 != null) {
-                if ((slot1.getVehicle().type == Vehicle.VehicleType.LARGE_CAR || slot2.getVehicle().type == Vehicle.VehicleType.LARGE_CAR) && (slot.size() > 2)) {
-                    return slot.get(2);
-                }
-            }
-            return i;
-        }
-        if (vehicleType == Vehicle.VehicleType.LARGE_CAR) {
-            if (slot2 == null) {
-                return slot.get(1);
-            }
-            return slot.get(2);
-        }
-        return slot.get(0);
+        return vehicleType.getSlotAsPerVehicleType(slot, slot1, slot2);
     }
 
     public boolean isParked(Vehicle vehicle) {
@@ -129,16 +105,11 @@ public class ParkingLot {
     }
 
     public List getSlotOfParkedCarAsPerColor(String colour) {
-        List slot = IntStream.range(0,parkingSlotsList.size())
-                .filter(i-> parkingSlotsList.get(i) != null && parkingSlotsList.get(i).getColor().equals(colour))
-                .mapToObj(i->i)
+        List slot = IntStream.range(0, parkingSlotsList.size())
+                .filter(i -> parkingSlotsList.get(i) != null && parkingSlotsList.get(i).getColor().equals(colour))
+                .mapToObj(i -> i)
                 .collect(toList());
-        /*
-        for (ParkingSlots slots : parkingSlotsList) {
-            if (slots != null && slots.getColor().equals(colour)) {
-                slot.add(parkingSlotsList.indexOf(slots));
-            }
-        }*/
+
         if (slot.equals(null)) {
             throw new ParkingLotException("Vehicle not Present", ParkingLotException.ExceptionType.VEHICLE_IS_NOT_PRESENT);
         }
@@ -146,16 +117,10 @@ public class ParkingLot {
     }
 
     public List<String> getSlotOfParkedCarsAsPerModelAndColor(String model, String color) {
-        List slot = IntStream.range(0,parkingSlotsList.size())
-                .filter(i-> parkingSlotsList.get(i) != null && parkingSlotsList.get(i).getColor().equals(color) && parkingSlotsList.get(i).getModel().equals(model))
-                .mapToObj(i-> model + ": Slot:" + parkingSlotsList.get(i).getSlot() + " NumberPlate:" + parkingSlotsList.get(i).getNumberPlate())
+        List slot = IntStream.range(0, parkingSlotsList.size())
+                .filter(i -> parkingSlotsList.get(i) != null && parkingSlotsList.get(i).getColor().equals(color) && parkingSlotsList.get(i).getModel().equals(model))
+                .mapToObj(i -> model + ": Slot:" + parkingSlotsList.get(i).getSlot() + " NumberPlate:" + parkingSlotsList.get(i).getNumberPlate())
                 .collect(toList());
-        /*
-        for (ParkingSlotis slots : parkingSlotsList) {
-            if (slots != null && slots.getModel().equals(model) && slots.getColor().equals(color)) {
-                slot.add(model + ": Slot:" + slots.getSlot() + " NumberPlate:" + slots.getNumberPlate());
-            }
-        }*/
         if (slot.equals(null)) {
             throw new ParkingLotException("Vehicle not Present", ParkingLotException.ExceptionType.VEHICLE_IS_NOT_PRESENT);
         }
@@ -163,15 +128,13 @@ public class ParkingLot {
     }
 
     public List<Integer> getSlotOfParkedCarsAsPerModel(String model) {
-        List slot =IntStream.range(0,parkingSlotsList.size())
+        List slot = IntStream.range(0, parkingSlotsList.size())
                 .filter(i -> this.parkingSlotsList.get(i) != null && model.equals(this.parkingSlotsList.get(i).getModel()))
-                .mapToObj(i->i)
+                .mapToObj(i -> i)
                 .collect(toList());
         if (slot.equals(null)) {
             throw new ParkingLotException("Vehicle not Present", ParkingLotException.ExceptionType.VEHICLE_IS_NOT_PRESENT);
         }
         return slot;
     }
-
-
 }
