@@ -39,4 +39,8 @@ public class ParkingSlots {
     public int getSlot() {
         return slot;
     }
+
+    public String getColor() {
+        return vehicle.color;
+    }
 }

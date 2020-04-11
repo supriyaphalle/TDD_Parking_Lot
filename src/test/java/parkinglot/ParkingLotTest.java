@@ -5,6 +5,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 public class ParkingLotTest {
@@ -20,8 +21,8 @@ public class ParkingLotTest {
     public void setUp() {
         parkingSystem = new ParkingSystem();
         parkingLot = new ParkingLot();
-        vehicle = new Vehicle(Vehicle.VehicleType.SMALL_CAR);
-        vehicle2 = new Vehicle(Vehicle.VehicleType.SMALL_CAR);
+        vehicle = new Vehicle(Vehicle.VehicleType.SMALL_CAR, "Gray");
+        vehicle2 = new Vehicle(Vehicle.VehicleType.SMALL_CAR, "Pink");
         owner = new ParkingLotOwner();
         security = new AirportSecurity();
         parkingLot.setParkingcapacity(parkingCapacity);
@@ -50,7 +51,7 @@ public class ParkingLotTest {
         try {
             parkingLot.park(parkinglot.DriverType.NORMAL, vehicle);
             parkingLot.park(parkinglot.DriverType.NORMAL, vehicle2);
-            parkingLot.park(parkinglot.DriverType.NORMAL, new parkinglot.Vehicle(Vehicle.VehicleType.SMALL_CAR));
+            parkingLot.park(parkinglot.DriverType.NORMAL, new parkinglot.Vehicle(Vehicle.VehicleType.SMALL_CAR, "Blue"));
         } catch (parkinglot.ParkingLotException e) {
             Assert.assertEquals(parkinglot.ParkingLotException.ExceptionType.Parking_lot_IS_FULL, e.type);
         }
@@ -123,11 +124,11 @@ public class ParkingLotTest {
             parkingLot.setParkingcapacity(5);
             parkingLot.park(parkinglot.DriverType.NORMAL, vehicle);
             parkingLot.park(parkinglot.DriverType.NORMAL, vehicle2);
-            parkingLot.park(parkinglot.DriverType.NORMAL, new parkinglot.Vehicle(Vehicle.VehicleType.SMALL_CAR));
-            parkingLot.park(parkinglot.DriverType.NORMAL, new parkinglot.Vehicle(Vehicle.VehicleType.SMALL_CAR));
+            parkingLot.park(parkinglot.DriverType.NORMAL, new parkinglot.Vehicle(Vehicle.VehicleType.SMALL_CAR, "Blue"));
+            parkingLot.park(parkinglot.DriverType.NORMAL, new parkinglot.Vehicle(Vehicle.VehicleType.SMALL_CAR, "Blue"));
             parkingLot.unPark(vehicle2);
             List emptySlot = parkingLot.getEmptySlot();
-            parkinglot.Vehicle vehicle4 = new parkinglot.Vehicle(Vehicle.VehicleType.SMALL_CAR);
+            parkinglot.Vehicle vehicle4 = new parkinglot.Vehicle(Vehicle.VehicleType.SMALL_CAR, "Blue");
             parkingLot.park((Integer) emptySlot.get(0), vehicle4);
             boolean parked = parkingLot.isParked(vehicle4);
             Assert.assertTrue(parked);
@@ -143,8 +144,8 @@ public class ParkingLotTest {
             parkingLot.setParkingcapacity(5);
             parkingLot.park(parkinglot.DriverType.NORMAL, vehicle);
             parkingLot.park(parkinglot.DriverType.NORMAL, vehicle2);
-            parkingLot.park(parkinglot.DriverType.NORMAL, new Vehicle(Vehicle.VehicleType.SMALL_CAR));
-            parkingLot.park(parkinglot.DriverType.NORMAL, new Vehicle(Vehicle.VehicleType.SMALL_CAR));
+            parkingLot.park(parkinglot.DriverType.NORMAL, new Vehicle(Vehicle.VehicleType.SMALL_CAR, "Blue"));
+            parkingLot.park(parkinglot.DriverType.NORMAL, new Vehicle(Vehicle.VehicleType.SMALL_CAR, "Blue"));
             int slot = parkingLot.findVehicle(vehicle2);
             boolean unPark = parkingLot.unPark(slot, vehicle2);
             Assert.assertTrue(unPark);
@@ -159,7 +160,7 @@ public class ParkingLotTest {
             parkingLot.setParkingcapacity(5);
             parkingLot.park(parkinglot.DriverType.NORMAL, vehicle);
             parkingLot.park(parkinglot.DriverType.NORMAL, vehicle2);
-            int slot = parkingLot.findVehicle(new Vehicle(Vehicle.VehicleType.SMALL_CAR));
+            int slot = parkingLot.findVehicle(new Vehicle(Vehicle.VehicleType.SMALL_CAR, "Blue"));
         } catch (ParkingLotException e) {
             Assert.assertEquals(ParkingLotException.ExceptionType.VEHICLE_IS_NOT_PRESENT, e.type);
         }
@@ -227,9 +228,9 @@ public class ParkingLotTest {
     public void givenVehicles_whenDriveTypeProvided_shouldGivePriorityToHandicap() {
         parkingSystem.add(parkingLot);
         parkingLot.setParkingcapacity(5);
-        parkingSystem.parkVehicle(parkinglot.DriverType.NORMAL, new parkinglot.Vehicle(Vehicle.VehicleType.SMALL_CAR));
-        parkingSystem.parkVehicle(parkinglot.DriverType.NORMAL, new parkinglot.Vehicle(Vehicle.VehicleType.SMALL_CAR));
-        parkingSystem.parkVehicle(parkinglot.DriverType.NORMAL, new parkinglot.Vehicle(Vehicle.VehicleType.SMALL_CAR));
+        parkingSystem.parkVehicle(parkinglot.DriverType.NORMAL, new parkinglot.Vehicle(Vehicle.VehicleType.SMALL_CAR, "Blue"));
+        parkingSystem.parkVehicle(parkinglot.DriverType.NORMAL, new parkinglot.Vehicle(Vehicle.VehicleType.SMALL_CAR, "Blue"));
+        parkingSystem.parkVehicle(parkinglot.DriverType.NORMAL, new parkinglot.Vehicle(Vehicle.VehicleType.SMALL_CAR, "Blue"));
         parkingSystem.parkVehicle(parkinglot.DriverType.HANDICAP, vehicle2);
         parkingSystem.parkVehicle(parkinglot.DriverType.NORMAL, vehicle);
         parkinglot.ParkingLot lot = parkingSystem.getParkingLotNumber(vehicle2);
@@ -241,9 +242,9 @@ public class ParkingLotTest {
     @Test
     public void givenLargeVehicle_ShouldParkWith_NoImmidiateVehicle() {
         parkingLot.setParkingcapacity(5);
-        Vehicle vehicle3 = new Vehicle(Vehicle.VehicleType.LARGE_CAR);
-        Vehicle vehicle4 = new Vehicle(Vehicle.VehicleType.LARGE_CAR);
-        Vehicle vehicle5 = new Vehicle(Vehicle.VehicleType.LARGE_CAR);
+        Vehicle vehicle3 = new Vehicle(Vehicle.VehicleType.LARGE_CAR, "Blue");
+        Vehicle vehicle4 = new Vehicle(Vehicle.VehicleType.LARGE_CAR, "Blue");
+        Vehicle vehicle5 = new Vehicle(Vehicle.VehicleType.LARGE_CAR, "Blue");
 
         parkingSystem.add(parkingLot);
         parkingLot.park(DriverType.NORMAL, vehicle3);
@@ -260,10 +261,10 @@ public class ParkingLotTest {
     @Test
     public void givenLargeVehicle_ShouldParkWith_NoImmidiateVehicleParked() {
         parkingLot.setParkingcapacity(5);
-        Vehicle vehicle3 = new Vehicle(Vehicle.VehicleType.LARGE_CAR);
-        Vehicle vehicle4 = new Vehicle(Vehicle.VehicleType.LARGE_CAR);
-        Vehicle vehicle5 = new Vehicle(Vehicle.VehicleType.SMALL_CAR);
-        Vehicle vehicle6 = new Vehicle(Vehicle.VehicleType.SMALL_CAR);
+        Vehicle vehicle3 = new Vehicle(Vehicle.VehicleType.LARGE_CAR, "Blue");
+        Vehicle vehicle4 = new Vehicle(Vehicle.VehicleType.LARGE_CAR, "Blue");
+        Vehicle vehicle5 = new Vehicle(Vehicle.VehicleType.SMALL_CAR, "Blue");
+        Vehicle vehicle6 = new Vehicle(Vehicle.VehicleType.SMALL_CAR, "Blue");
 
         parkingSystem.add(parkingLot);
         parkingLot.park(DriverType.NORMAL, vehicle3);
@@ -292,12 +293,12 @@ public class ParkingLotTest {
         parkingLot4.setParkingcapacity(5);
         parkingLot5.setParkingcapacity(5);
 
-        Vehicle vehicle3 = new Vehicle(Vehicle.VehicleType.SMALL_CAR);
-        Vehicle vehicle4 = new Vehicle(Vehicle.VehicleType.SMALL_CAR);
-        Vehicle vehicle5 = new Vehicle(Vehicle.VehicleType.SMALL_CAR);
-        Vehicle vehicle6 = new Vehicle(Vehicle.VehicleType.SMALL_CAR);
-        Vehicle vehicle7 = new Vehicle(Vehicle.VehicleType.LARGE_CAR);
-        Vehicle vehicle8 = new Vehicle(Vehicle.VehicleType.SMALL_CAR);
+        Vehicle vehicle3 = new Vehicle(Vehicle.VehicleType.SMALL_CAR, "Blue");
+        Vehicle vehicle4 = new Vehicle(Vehicle.VehicleType.SMALL_CAR, "Blue");
+        Vehicle vehicle5 = new Vehicle(Vehicle.VehicleType.SMALL_CAR, "Blue");
+        Vehicle vehicle6 = new Vehicle(Vehicle.VehicleType.SMALL_CAR, "Blue");
+        Vehicle vehicle7 = new Vehicle(Vehicle.VehicleType.LARGE_CAR, "Blue");
+        Vehicle vehicle8 = new Vehicle(Vehicle.VehicleType.SMALL_CAR, "Blue");
         parkingSystem.add(parkingLot);
         parkingSystem.add(parkingLot2);
         parkingSystem.add(parkingLot3);
@@ -315,6 +316,48 @@ public class ParkingLotTest {
         ParkingLot parkingLotNumber = parkingSystem.getParkingLotNumber(vehicle7);
         int slot = parkingLotNumber.findVehicle(vehicle7);
         Assert.assertEquals(2, slot);
+    }
+    //UC12
+    @Test
+    public void givenAVehicle_WhenParked_ShouldReturnAllSlotNoOfWhiteCars(){
+        Vehicle vehicle3 = new Vehicle(Vehicle.VehicleType.SMALL_CAR,"Black");
+        Vehicle vehicle4 = new Vehicle(Vehicle.VehicleType.SMALL_CAR,"White");
+        Vehicle vehicle5 = new Vehicle(Vehicle.VehicleType.SMALL_CAR,"Red");
+        Vehicle vehicle6 = new Vehicle(Vehicle.VehicleType.SMALL_CAR,"White");
+        Vehicle vehicle7 = new Vehicle(Vehicle.VehicleType.LARGE_CAR,"Yellow");
+        Vehicle vehicle8 = new Vehicle(Vehicle.VehicleType.SMALL_CAR,"Blue");
+        parkingLot.setParkingcapacity(10);
+        parkingLot.park(DriverType.NORMAL,vehicle);
+        parkingLot.park(DriverType.HANDICAP,vehicle2);
+        parkingLot.park(DriverType.NORMAL,vehicle3);
+        parkingLot.park(DriverType.NORMAL,vehicle4);
+        parkingLot.park(DriverType.NORMAL,vehicle5);
+        parkingLot.park(DriverType.HANDICAP,vehicle6);
+        parkingLot.park(DriverType.NORMAL,vehicle7);
+        parkingLot.park(DriverType.NORMAL,vehicle8);
+        List <Integer> whiteCars= parkingLot.getSlotOfParkedCarAsPerColor("White");
+        List<Integer> slot=new ArrayList<>();
+        slot.add(1);
+        slot.add(7);
+        Assert.assertEquals(slot,whiteCars);
+    }
+
+    @Test
+    public void givenAVehicle_WhenNotgetRequiredColor_ShouldThrowException(){
+        try {
+            Vehicle vehicle3 = new Vehicle(Vehicle.VehicleType.SMALL_CAR, "Black");
+            Vehicle vehicle4 = new Vehicle(Vehicle.VehicleType.SMALL_CAR, "Blue");
+            Vehicle vehicle5 = new Vehicle(Vehicle.VehicleType.SMALL_CAR, "Red");
+            parkingLot.setParkingcapacity(8);
+            parkingLot.park(DriverType.NORMAL, vehicle);
+            parkingLot.park(DriverType.HANDICAP, vehicle2);
+            parkingLot.park(DriverType.NORMAL, vehicle3);
+            parkingLot.park(DriverType.NORMAL, vehicle4);
+            parkingLot.park(DriverType.NORMAL, vehicle5);
+            List<Integer> whiteCars = parkingLot.getSlotOfParkedCarAsPerColor("White");
+        }catch (ParkingLotException e){
+            Assert.assertEquals(ParkingLotException.ExceptionType.VEHICLE_IS_NOT_PRESENT,e.type);
+        }
     }
 
 }

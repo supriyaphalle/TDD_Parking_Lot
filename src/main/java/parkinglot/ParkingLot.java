@@ -4,7 +4,10 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+
+import static java.util.stream.Collectors.toList;
 
 public class ParkingLot {
     private List<ParkingSlots> parkingSlotsList;
@@ -33,14 +36,6 @@ public class ParkingLot {
             }
         }
         return emptyParkingSlots;
-       /* List<ParkingSlots> emptyList= new ArrayList<>();
-        for(ParkingSlots slots : parkingSlotsList){
-            if(slots == null){
-                emptyList.add(slots);
-            }
-        }       return emptyList;
-
-       */
     }
 
     public void register(ParkinglotObserver observer1) {
@@ -126,5 +121,19 @@ public class ParkingLot {
     int getParkingTime(Vehicle vehicle) {
         int slot = this.findVehicle(vehicle);
         return parkingSlotsList.get(slot).getTime();
+    }
+
+    public List getSlotOfParkedCarAsPerColor(String colour) {
+        List slot = new ArrayList<>();
+        int bound = parkingSlotsList.size();
+       for(ParkingSlots slots: parkingSlotsList){
+           if(slots!= null && slots.getColor().equals(colour)){
+               slot.add(parkingSlotsList.indexOf(slots));
+           }
+       }
+       if(slot.equals(null)){
+           throw new ParkingLotException("Vehicle not Present",ParkingLotException.ExceptionType.VEHICLE_IS_NOT_PRESENT);
+       }
+        return slot;
     }
 }

@@ -6,8 +6,10 @@ public class Vehicle {
     }
 
      VehicleType type;
+    public String color;
 
-    public Vehicle(VehicleType type){
+    public Vehicle(VehicleType type, String color){
         this.type=type;
+        this.color = color;
     }
 }
