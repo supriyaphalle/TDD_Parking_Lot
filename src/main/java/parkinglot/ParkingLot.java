@@ -78,7 +78,7 @@ public class ParkingLot {
             return i;
         }
         if (vehicleType == Vehicle.VehicleType.LARGE_CAR) {
-            if(slot2 == null) {
+            if (slot2 == null) {
                 return slot.get(1);
             }
             return slot.get(2);
@@ -105,7 +105,7 @@ public class ParkingLot {
     public boolean unPark(int slot, Vehicle vehicle) {
         if (parkingSlotsList.get(slot).getVehicle().equals(vehicle)) {
             parkingSlotsList.get(slot).recordUnparkTime(LocalDateTime.now());
-            new ParkingLotOwner().notifyTime(parkingSlotsList.get(slot).getTime());
+            new ParkingLotOwner().notifyTime(parkingSlotsList.get(slot).getTimeSlot());
             parkingSlotsList.set(slot, null);
             informer.notifySpaceAvailableUpdate();
             return true;
@@ -120,20 +120,33 @@ public class ParkingLot {
 
     int getParkingTime(Vehicle vehicle) {
         int slot = this.findVehicle(vehicle);
-        return parkingSlotsList.get(slot).getTime();
+        return parkingSlotsList.get(slot).getTimeSlot();
     }
 
     public List getSlotOfParkedCarAsPerColor(String colour) {
         List slot = new ArrayList<>();
         int bound = parkingSlotsList.size();
-       for(ParkingSlots slots: parkingSlotsList){
-           if(slots!= null && slots.getColor().equals(colour)){
-               slot.add(parkingSlotsList.indexOf(slots));
-           }
-       }
-       if(slot.equals(null)){
-           throw new ParkingLotException("Vehicle not Present",ParkingLotException.ExceptionType.VEHICLE_IS_NOT_PRESENT);
-       }
+        for (ParkingSlots slots : parkingSlotsList) {
+            if (slots != null && slots.getColor().equals(colour)) {
+                slot.add(parkingSlotsList.indexOf(slots));
+            }
+        }
+        if (slot.equals(null)) {
+            throw new ParkingLotException("Vehicle not Present", ParkingLotException.ExceptionType.VEHICLE_IS_NOT_PRESENT);
+        }
+        return slot;
+    }
+
+    public List<String> getSlotOfParkedCarsAsPerModel(String model, String color) {
+        List slot = new ArrayList<>();
+        for (ParkingSlots slots : parkingSlotsList) {
+            if (slots != null && slots.getModel().equals(model) && slots.getColor().equals(color)) {
+                slot.add(model + ": Slot:" + slots.getSlot() + " NumberPlate:" + slots.getNumberPlate());
+            }
+        }
+        if (slot.equals(null)) {
+            throw new ParkingLotException("Vehicle not Present", ParkingLotException.ExceptionType.VEHICLE_IS_NOT_PRESENT);
+        }
         return slot;
     }
 }

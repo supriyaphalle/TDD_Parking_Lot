@@ -5,7 +5,7 @@ import java.time.LocalDateTime;
 import java.util.Objects;
 
 public class ParkingSlots {
-     LocalDateTime time,UnparkTime;
+    LocalDateTime time,UnparkTime;
     Vehicle vehicle ;
    int slot;
 
@@ -23,9 +23,8 @@ public class ParkingSlots {
         UnparkTime = currentTimeMillis;
     }
 
-    public int getTime(){
-        return UnparkTime.getMinute() - time.getMinute();
-
+    public LocalDateTime getTime(){
+        return time;
     }
     @Override
     public boolean equals(Object o) {
@@ -42,5 +41,17 @@ public class ParkingSlots {
 
     public String getColor() {
         return vehicle.color;
+    }
+    public String getModel(){
+        return vehicle.modelName;
+    }
+
+    public String getNumberPlate() {
+        return vehicle.numberPlate;
+    }
+
+    public int getTimeSlot() {
+        int i = UnparkTime.getMinute() - time.getMinute();
+        return i;
     }
 }
