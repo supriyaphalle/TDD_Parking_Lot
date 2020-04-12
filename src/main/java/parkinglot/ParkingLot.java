@@ -170,23 +170,32 @@ public class ParkingLot {
     }
 
     public List<String> geHandicapCarsParkedOnRowBAndD() {
-         List<String> vehicles = new ArrayList<>();
-         arrangeSlotsinRows();
-         for (int i: rowB) {
-            if(parkingSlotsList.get(i)!=null && parkingSlotsList.get(i).driverType.equals(DriverType.HANDICAP)
-                    && parkingSlotsList.get(i).getVehicle().type.equals(VehicleType.SMALL_CAR) ){
-                vehicles.add(parkingSlotsList.get(i).getSlot() +" "+parkingSlotsList.get(i).getNumberPlate() +" " + parkingSlotsList.get(i).getModel());
+        List<String> vehicles = new ArrayList<>();
+        arrangeSlotsinRows();
+        for (int i : rowB) {
+            if (parkingSlotsList.get(i) != null && parkingSlotsList.get(i).driverType.equals(DriverType.HANDICAP)
+                    && parkingSlotsList.get(i).getVehicle().type.equals(VehicleType.SMALL_CAR)) {
+                vehicles.add(parkingSlotsList.get(i).getSlot() + " " + parkingSlotsList.get(i).getNumberPlate() + " " + parkingSlotsList.get(i).getModel());
             }
         }
-        for (int i: rowD) {
-            if(parkingSlotsList.get(i)!=null && parkingSlotsList.get(i).driverType.equals(DriverType.HANDICAP)
-                    && parkingSlotsList.get(i).getVehicle().type.equals(VehicleType.SMALL_CAR) ){
-                vehicles.add(parkingSlotsList.get(i).getSlot() +" "+parkingSlotsList.get(i).getNumberPlate() +" " + parkingSlotsList.get(i).getModel());
+        for (int i : rowD) {
+            if (parkingSlotsList.get(i) != null && parkingSlotsList.get(i).driverType.equals(DriverType.HANDICAP)
+                    && parkingSlotsList.get(i).getVehicle().type.equals(VehicleType.SMALL_CAR)) {
+                vehicles.add(parkingSlotsList.get(i).getSlot() + " " + parkingSlotsList.get(i).getNumberPlate() + " " + parkingSlotsList.get(i).getModel());
             }
         }
         if (vehicles.equals(null)) {
             throw new ParkingLotException("Vehicle not Present", ParkingLotException.ExceptionType.VEHICLE_IS_NOT_PRESENT);
         }
         return vehicles;
+    }
+
+    public List<String> getListofAllVehiclesWithNumberPlate() {
+        List slot = IntStream.range(0, parkingSlotsList.size())
+                .filter(i -> parkingSlotsList.get(i) != null)
+                .mapToObj(i -> "Slot:" + parkingSlotsList.get(i).getSlot() + " NumberPlate:" + parkingSlotsList.get(i).getNumberPlate())
+                .collect(toList());
+        return slot;
+
     }
 }

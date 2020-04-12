@@ -488,18 +488,34 @@ public class ParkingLotTest {
         car.add("3 DF1AW5410 Toyota");
         Assert.assertEquals(car, cars);
     }
+
     @Test
     public void givenAVehicles_WhenNoHandicapDriveriedCarInRowBandD_ShouldThrowException() {
-        try{
+        try {
+            Vehicle vehicle3 = new Vehicle(VehicleType.SMALL_CAR, "Black", "Maruti", "DF1AW5410");
+            parkingLot.setParkingCapacity(8);
+            parkingLot.park(DriverType.NORMAL, vehicle);
+            parkingLot.park(DriverType.NORMAL, vehicle2);
+            parkingLot.park(DriverType.NORMAL, vehicle3);
+            List<String> cars = parkingLot.geHandicapCarsParkedOnRowBAndD();
+        } catch (ParkingLotException e) {
+            Assert.assertEquals(ParkingLotException.ExceptionType.VEHICLE_IS_NOT_PRESENT, e.type);
+        }
+    }
+
+    //UC17
+    @Test
+    public void givenAVehiclesParked_ShouldReturnListOfAllVehiclesWithNumberPlat() {
         Vehicle vehicle3 = new Vehicle(VehicleType.SMALL_CAR, "Black", "Maruti", "DF1AW5410");
         parkingLot.setParkingCapacity(8);
         parkingLot.park(DriverType.NORMAL, vehicle);
         parkingLot.park(DriverType.NORMAL, vehicle2);
         parkingLot.park(DriverType.NORMAL, vehicle3);
-        List<String> cars = parkingLot.geHandicapCarsParkedOnRowBAndD();
-    } catch (ParkingLotException e) {
-        Assert.assertEquals(ParkingLotException.ExceptionType.VEHICLE_IS_NOT_PRESENT, e.type);
+        List<String> cars = parkingLot.getListofAllVehiclesWithNumberPlate();
+        List<String> car = new ArrayList<>();
+        car.add("Slot:5 NumberPlate:DF1AW5410");
+        car.add("Slot:6 NumberPlate:DF1AW5410");
+        car.add("Slot:7 NumberPlate:DF1AW5410");
+        Assert.assertEquals(car, cars);
     }
-    }
-
 }
