@@ -137,4 +137,16 @@ public class ParkingLot {
         }
         return slot;
     }
+
+    public List<Integer> getParkedCarsInLast30Min() {
+        LocalDateTime now = LocalDateTime.now();
+                List slot = IntStream.range(0, parkingSlotsList.size())
+                .filter(i -> this.parkingSlotsList.get(i) != null && this.parkingSlotsList.get(i).getTime().getMinute()-now.getMinute() <= 30 )
+                .mapToObj(i -> i)
+                .collect(toList());
+        if (slot.equals(null)) {
+            throw new ParkingLotException("Vehicle not Present", ParkingLotException.ExceptionType.VEHICLE_IS_NOT_PRESENT);
+        }
+        return slot;
+    }
 }

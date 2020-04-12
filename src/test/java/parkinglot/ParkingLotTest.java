@@ -447,6 +447,26 @@ public class ParkingLotTest {
             Assert.assertEquals(ParkingLotException.ExceptionType.VEHICLE_IS_NOT_PRESENT, e.type);
         }
     }
-
+//UC15
+    @Test
+    public void givenAVehicles_ShouldReturnParkedVehiclesinLast30Min(){
+        Vehicle vehicle3 = new Vehicle(VehicleType.SMALL_CAR, "Black", "Maruti", "DF1AW5410");
+        Vehicle vehicle4 = new Vehicle(VehicleType.SMALL_CAR, "White", "Scoda", "DF1AW5410");
+        Vehicle vehicle5 = new Vehicle(VehicleType.SMALL_CAR, "Red", "Toyota", "DF1AW5410");
+        parkingLot.setParkingCapacity(8);
+        parkingLot.park(DriverType.NORMAL, vehicle);
+        parkingLot.park(DriverType.HANDICAP, vehicle2);
+        parkingLot.park(DriverType.NORMAL, vehicle3);
+        parkingLot.park(DriverType.NORMAL, vehicle4);
+        parkingLot.park(DriverType.NORMAL, vehicle5);
+        List<Integer> cars = parkingLot.getParkedCarsInLast30Min();
+        List<Integer> car= new ArrayList<>();
+        car.add(0);
+        car.add(4);
+        car.add(5);
+        car.add(6);
+        car.add(7);
+        Assert.assertEquals(car,cars);
+    }
 
 }
