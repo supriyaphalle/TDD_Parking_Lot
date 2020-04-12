@@ -12,6 +12,7 @@ public class ParkingLot {
     private List<ParkingSlots> parkingSlotsList;
     private int parkingCapacity = 0;
     ParkingInformer informer = new ParkingInformer();
+    private ArrayList<Integer> rowA, rowB, rowC, rowD;
 
     public ParkingLot() {
         parkingSlotsList = new ArrayList<>();
@@ -46,12 +47,12 @@ public class ParkingLot {
             throw new ParkingLotException("Vehicle already parked", ParkingLotException.ExceptionType.VEHICLE_ALREADY_PARKED);
         }
         int slot = getslot(driverType, vehicle.type);
-        ParkingSlots parkingSlot = new ParkingSlots(vehicle, slot);
+        ParkingSlots parkingSlot = new ParkingSlots(driverType, vehicle, slot);
         parkingSlotsList.set(slot, parkingSlot);
     }
 
-    public void park(int slot, Vehicle vehicle) {
-        ParkingSlots parkingSlot = new ParkingSlots(vehicle, slot);
+    public void park(DriverType driverType, int slot, Vehicle vehicle) {
+        ParkingSlots parkingSlot = new ParkingSlots(driverType, vehicle, slot);
         parkingSlotsList.set(slot, parkingSlot);
     }
 
@@ -140,13 +141,52 @@ public class ParkingLot {
 
     public List<Integer> getParkedCarsInLast30Min() {
         LocalDateTime now = LocalDateTime.now();
-                List slot = IntStream.range(0, parkingSlotsList.size())
-                .filter(i -> this.parkingSlotsList.get(i) != null && this.parkingSlotsList.get(i).getTime().getMinute()-now.getMinute() <= 30 )
+        List slot = IntStream.range(0, parkingSlotsList.size())
+                .filter(i -> this.parkingSlotsList.get(i) != null && this.parkingSlotsList.get(i).getTime().getMinute() - now.getMinute() <= 30)
                 .mapToObj(i -> i)
                 .collect(toList());
         if (slot.equals(null)) {
             throw new ParkingLotException("Vehicle not Present", ParkingLotException.ExceptionType.VEHICLE_IS_NOT_PRESENT);
         }
         return slot;
+    }
+
+    public void arrangeSlotsinRows() {
+        rowA = new ArrayList<>();
+        rowB = new ArrayList<>();
+        rowC = new ArrayList<>();
+        rowD = new ArrayList<>();
+        this.addToRow(rowA, 0);
+        this.addToRow(rowB, 1);
+        this.addToRow(rowC, 2);
+        this.addToRow(rowD, 3);
+    }
+
+    private void addToRow(ArrayList<Integer> row, int i) {
+        while (i < parkingCapacity) {
+            row.add(i);
+            i += 4;
+        }
+    }
+
+    public List<String> geHandicapCarsParkedOnRowBAndD() {
+         List<String> vehicles = new ArrayList<>();
+         arrangeSlotsinRows();
+         for (int i: rowB) {
+            if(parkingSlotsList.get(i)!=null && parkingSlotsList.get(i).driverType.equals(DriverType.HANDICAP)
+                    && parkingSlotsList.get(i).getVehicle().type.equals(VehicleType.SMALL_CAR) ){
+                vehicles.add(parkingSlotsList.get(i).getSlot() +" "+parkingSlotsList.get(i).getNumberPlate() +" " + parkingSlotsList.get(i).getModel());
+            }
+        }
+        for (int i: rowD) {
+            if(parkingSlotsList.get(i)!=null && parkingSlotsList.get(i).driverType.equals(DriverType.HANDICAP)
+                    && parkingSlotsList.get(i).getVehicle().type.equals(VehicleType.SMALL_CAR) ){
+                vehicles.add(parkingSlotsList.get(i).getSlot() +" "+parkingSlotsList.get(i).getNumberPlate() +" " + parkingSlotsList.get(i).getModel());
+            }
+        }
+        if (vehicles.equals(null)) {
+            throw new ParkingLotException("Vehicle not Present", ParkingLotException.ExceptionType.VEHICLE_IS_NOT_PRESENT);
+        }
+        return vehicles;
     }
 }

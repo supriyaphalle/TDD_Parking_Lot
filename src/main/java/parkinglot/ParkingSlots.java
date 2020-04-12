@@ -6,10 +6,12 @@ import java.util.Objects;
 
 public class ParkingSlots {
     LocalDateTime time,UnparkTime;
+    DriverType driverType;
     Vehicle vehicle ;
    int slot;
 
-    public ParkingSlots(Vehicle vehicle, int slot) {
+    public ParkingSlots(DriverType driverType, Vehicle vehicle, int slot) {
+        this.driverType = driverType;
         this.vehicle = vehicle;
         this.slot=slot;
         this.time=LocalDateTime.now();
